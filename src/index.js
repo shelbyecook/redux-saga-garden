@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import App from './App';
+
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import axios from 'axios';
+import { takeEvery, takeLatest, put } from 'redux-saga/effects';
+
 import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
-import { takeEvery, put } from 'redux-saga/effects';
-
-import App from './App';
+import axios from 'axios';
 
 // this startingPlantArray should eventually be removed
 const startingPlantArray = [
@@ -24,7 +25,7 @@ const plantList = (state = startingPlantArray, action) => {
       return state;
   }
 };
-
+//SAGAS WAITING FOR DISPATCH
 function* rootSaga(action) {
   yield takeEvery('GET_PLANT', getPlant);
   yield takeEvery('POST_PLANT', postPlant);
@@ -32,14 +33,13 @@ function* rootSaga(action) {
 }
 
 //CREATE SAGAS - GET
-function* getPlant(action) {
+function* getPlant() {
   try {
     const response = yield axios.get('/plant');
     yield put({
       type: 'SET_GARDEN', //DISPATCHING RESPONSE TO STATE (REDUCER)
       payload: response.data,
     });
-    console.log(response);
   } catch (err) {
     console.log(err);
   }
@@ -57,7 +57,7 @@ function* postPlant(action) {
   }
 }
 
-// Create sagaMiddleware
+//SETUP & ADD SAGA
 const sagaMiddleware = createSagaMiddleware();
 
 const plantReducer = (state = [], action) => {
@@ -70,11 +70,7 @@ const plantReducer = (state = [], action) => {
 };
 
 const store = createStore(
-  combineReducers({
-    plantList,
-    getPlant,
-    postPlant,
-  }),
+  combineReducers({ plantList }),
   applyMiddleware(sagaMiddleware, logger)
 );
 
