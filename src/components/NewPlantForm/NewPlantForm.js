@@ -6,15 +6,21 @@ class NewPlantForm extends Component {
     newPlant: {
       id: 4,
       name: '',
+      kingdom: '',
+      clade: '',
+      order: '',
+      family: '',
+      subfamily: '',
+      genus: '',
     },
   };
 
-  handleNameChange = (event) => {
-    console.log('event happended');
+  handleNameChange = (fieldKey) => (event) => {
+    console.log('event happended', this.state.newPlant);
     this.setState({
       newPlant: {
         ...this.state.newPlant,
-        name: event.target.value,
+        [fieldKey]: event.target.value,
       },
     });
   };
@@ -26,6 +32,12 @@ class NewPlantForm extends Component {
       newPlant: {
         id: this.state.newPlant.id + 1,
         name: '',
+        kingdom: '',
+        clade: '',
+        order: '',
+        family: '',
+        subfamily: '',
+        genus: '',
       },
     });
   };
@@ -38,9 +50,47 @@ class NewPlantForm extends Component {
         <form onSubmit={this.addNewPlant}>
           <input
             type="text"
+            name="name"
             value={this.state.newPlant.name}
-            onChange={this.handleNameChange}
+            onChange={this.handleNameChange('name')}
           />
+          <input
+            type="text"
+            name="kingdom"
+            value={this.state.newPlant.kingdom}
+            onChange={this.handleNameChange('kingdom')}
+          />
+          <input
+            type="text"
+            name="clade"
+            value={this.state.newPlant.clade}
+            onChange={this.handleNameChange('clade')}
+          />
+          <input
+            type="text"
+            name="order"
+            value={this.state.newPlant.order}
+            onChange={this.handleNameChange('order')}
+          />
+          <input
+            type="text"
+            name="family"
+            value={this.state.newPlant.family}
+            onChange={this.handleNameChange('family')}
+          />
+          <input
+            type="text"
+            name="subfamily"
+            value={this.state.newPlant.subfamily}
+            onChange={this.handleNameChange('subfamily')}
+          />
+          <input
+            type="text"
+            name="genus"
+            value={this.state.newPlant.genus}
+            onChange={this.handleNameChange('genus')}
+          />
+
           <input type="submit" value="Add New Plant" />
         </form>
       </div>
