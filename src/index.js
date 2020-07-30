@@ -6,63 +6,66 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { takeEvery, takeLatest, put } from 'redux-saga/effects';
 
+// IMPORT MIDDLEWARE
 import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
 import axios from 'axios';
 
-// this startingPlantArray should eventually be removed
-const startingPlantArray = [
-  { id: 1, name: 'Rose' },
-  { id: 2, name: 'Tulip' },
-  { id: 3, name: 'Oak' },
-];
-
-const plantList = (state = startingPlantArray, action) => {
-  switch (action.type) {
-    case 'ADD_PLANT':
-      return [...state, action.payload];
-    default:
-      return state;
-  }
-};
-//SAGAS WAITING FOR DISPATCH
-function* rootSaga(action) {
-  yield takeEvery('GET_PLANT', getPlant);
-  yield takeEvery('POST_PLANT', postPlant);
-  // register all of our sagas
+// sagas waiting for dispatch
+function* rootSaga() {
+  yield takeEvery('GET_PLANTS', getPlants);
+  yield takeEvery('ADD_PLANT', addPlant);
+  yield takeEvery('DELETE_PLANT', deletePlant);
 }
 
-//CREATE SAGAS - GET
-function* getPlant() {
+function* getPlants() {
   try {
-    const response = yield axios.get('/plant');
+    const response = yield axios.get('/api/plant');
     yield put({
-      type: 'SET_GARDEN', //DISPATCHING RESPONSE TO STATE (REDUCER)
+      type: 'SET_PLANTS',
       payload: response.data,
     });
   } catch (err) {
-    console.log(err);
+    console.log(`Yikes, didn't get that. ${err}`);
   }
 }
 
-function* postPlant(action) {
+function* addPlant(action) {
   try {
-    yield axios.post('/plant', action.payload);
-    // put = this.props.dispatch()
+    console.log(action.payload);
+    yield axios.post('/api/plant', action.payload);
     yield put({
-      type: 'GET_PLANT', //CALLING THE GET_FRUIT SAGA TO RUN, POST --> GET
+      type: 'GET_PLANTS',
     });
   } catch (err) {
     console.log(err);
   }
 }
 
-//SETUP & ADD SAGA
+function* deletePlant(action) {
+  try {
+    yield axios.delete(`/api/plant/${action.payload}`);
+    yield put({
+      type: 'GET_PLANTS',
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// SETUP saga/ADD saga
 const sagaMiddleware = createSagaMiddleware();
 
-const plantReducer = (state = [], action) => {
+// this startingPlantArray should eventually be removed
+// const startingPlantArray = [
+//   { id: 1, name: 'Rose' },
+//   { id: 2, name: 'Tulip' },
+//   { id: 3, name: 'Oak' },
+// ];
+
+const plantList = (state = [], action) => {
   switch (action.type) {
-    case 'SET_PLANT':
+    case 'SET_PLANTS':
       return action.payload;
     default:
       return state;
@@ -71,9 +74,10 @@ const plantReducer = (state = [], action) => {
 
 const store = createStore(
   combineReducers({ plantList }),
-  applyMiddleware(sagaMiddleware, logger)
+  applyMiddleware(logger, sagaMiddleware)
 );
 
+// to run sagas
 sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(

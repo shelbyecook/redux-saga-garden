@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import './PlantList.css';
 import { connect } from 'react-redux';
+
+const mapStateToProps = (store) => ({
+  plantList: store.plantList,
+});
 
 class PlantList extends Component {
   componentDidMount() {
@@ -9,7 +12,14 @@ class PlantList extends Component {
       type: 'GET_PLANTS',
     });
   }
-
+  deletePlant = (id) => (event) => {
+    // console.log('plant id', index);
+    //dispatch out to saga
+    this.props.dispatch({
+      type: 'DELETE_PLANT',
+      payload: id,
+    });
+  };
   render() {
     console.log(this.props.plantList);
 
@@ -40,6 +50,9 @@ class PlantList extends Component {
                   <td>{item.family}</td>
                   <td>{item.subfamily}</td>
                   <td>{item.genus}</td>
+                  <td>
+                    <button onClick={this.deletePlant(item.id)}>X</button>
+                  </td>
                 </tr>
               );
             })}
@@ -49,9 +62,5 @@ class PlantList extends Component {
     );
   }
 }
-
-const mapStateToProps = (store) => ({
-  plantList: store.plantList,
-});
 
 export default connect(mapStateToProps)(PlantList);
