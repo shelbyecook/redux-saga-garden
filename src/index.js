@@ -69,8 +69,6 @@ const plantReducer = (state = [], action) => {
   }
 };
 
-const sagaMiddleware = createSagaMiddleware();
-
 const store = createStore(
   combineReducers({
     plantList,
