@@ -35,13 +35,13 @@ class NewPlantForm extends Component {
     this.setState({
       newPlant: {
         id: this.state.newPlant.id + 1,
-        name: '',
-        kingdom: '',
-        clade: '',
-        order: '',
-        family: '',
-        subfamily: '',
-        genus: '',
+        name: this.state.newPlant.name,
+        kingdom: this.state.newPlant.kingdom,
+        clade: this.state.newPlant.clade,
+        order: this.state.newPlant.order,
+        family: this.state.newPlant.family,
+        subfamily: this.state.newPlant.subfamily,
+        genus: this.state.newPlant.genus,
       },
     });
   };
@@ -101,7 +101,6 @@ class NewPlantForm extends Component {
             value={this.state.newPlant.genus}
             onChange={this.handleNameChange('genus')}
           />
-          <label for="name">Name</label>
           <input type="submit" value="Add New Plant" />
         </form>
       </div>
