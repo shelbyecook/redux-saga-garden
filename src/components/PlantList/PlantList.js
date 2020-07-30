@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (store) => ({
-  plantList: store.plantList,
-});
-
 class PlantList extends Component {
   componentDidMount() {
     // use component did mount to dispatch an action to request the plantList from the API
@@ -63,4 +59,7 @@ class PlantList extends Component {
   }
 }
 
+const mapStateToProps = (store) => ({
+  plantList: store.plantList,
+});
 export default connect(mapStateToProps)(PlantList);

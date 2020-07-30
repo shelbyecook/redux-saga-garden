@@ -4,7 +4,7 @@ import App from './App';
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import { takeEvery, takeLatest, put } from 'redux-saga/effects';
+import { takeEvery, put } from 'redux-saga/effects';
 
 // IMPORT MIDDLEWARE
 import logger from 'redux-logger';
@@ -26,7 +26,7 @@ function* getPlants() {
       payload: response.data,
     });
   } catch (err) {
-    console.log(`Yikes, didn't get that. ${err}`);
+    console.log(`Oops, there was an error. ${err}`);
   }
 }
 
@@ -55,13 +55,6 @@ function* deletePlant(action) {
 
 // SETUP saga/ADD saga
 const sagaMiddleware = createSagaMiddleware();
-
-// this startingPlantArray should eventually be removed
-// const startingPlantArray = [
-//   { id: 1, name: 'Rose' },
-//   { id: 2, name: 'Tulip' },
-//   { id: 3, name: 'Oak' },
-// ];
 
 const plantList = (state = [], action) => {
   switch (action.type) {

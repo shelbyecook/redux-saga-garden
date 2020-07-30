@@ -8,7 +8,7 @@ const mapStateToProps = (reduxState) => ({
 class NewPlantForm extends Component {
   state = {
     newPlant: {
-      id: 4,
+      id: 0,
       name: '',
       kingdom: '',
       clade: '',
@@ -20,13 +20,13 @@ class NewPlantForm extends Component {
   };
 
   handleNameChange = (fieldKey) => (event) => {
-    console.log('event happended', this.state.newPlant);
     this.setState({
       newPlant: {
         ...this.state.newPlant,
         [fieldKey]: event.target.value,
       },
     });
+    console.log(this.state.newPlant);
   };
 
   addNewPlant = (event) => {
@@ -35,13 +35,13 @@ class NewPlantForm extends Component {
     this.setState({
       newPlant: {
         id: this.state.newPlant.id + 1,
-        name: this.state.newPlant.name,
-        kingdom: this.state.newPlant.kingdom,
-        clade: this.state.newPlant.clade,
-        order: this.state.newPlant.order,
-        family: this.state.newPlant.family,
-        subfamily: this.state.newPlant.subfamily,
-        genus: this.state.newPlant.genus,
+        name: '',
+        kingdom: '',
+        clade: '',
+        order: '',
+        family: '',
+        subfamily: '',
+        genus: '',
       },
     });
   };
